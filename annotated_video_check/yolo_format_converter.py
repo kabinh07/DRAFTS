@@ -30,37 +30,47 @@ with open('project-1-at-2024-11-02-12-42-facb572e.json', 'r') as f:
     annotations = json.load(f)
 
 data = []
+count = 0
 
 for idx, ann in enumerate(annotations): 
     file = ann['data']['video'].split('/')[-1]
-    print(file)
     convert_frames(file)
     for result in ann['annotations'][0]['result']:
         values = result['value']['sequence']
         label = str(result['value']['labels'][0])
-        for frame in tqdm(values, total = len(values)):
-            row = {}
-            row['frame_name'] = f"{file.split('.')[0]}_{frame['frame']}.jpg"
-            row['x'] = frame['x']
-            row['y'] = frame['y']
-            row['width'] = frame['width']
-            row['height'] = frame['height']
-            row['label'] = label
-            data.append(row)
+        for frame in values:
+            frame['frame'] = f"{file.split('.')[0]}_{frame['frame']}.jpg"
+            frame['label'] = label
+            data.append(frame)
+            
+            # row['frame_name'] = f"{file.split('.')[0]}_{frame['frame']}.jpg"
+            # row['results'] = [{'x': frame['x'], 'y': frame['y'], 'width': frame['width'], 'height': frame['height'], 'label': label}]
+            # row['x'] = frame['x']
+            # row['y'] = frame['y']
+            # row['width'] = frame['width']
+            # row['height'] = frame['height']
+            # row['label'] = label
+            # data.append(row)
 
 with open('dataset.json', 'w', encoding='utf-8') as f:
     json.dump(data, f)
 
+# with open('dataset.json', 'r') as f:
+#     dataset = json.load(f)
+
+# images = os.listdir('images')
+
 # img = Image.open(f"all_images/{images[0]}")
 # org_w, org_h = img.size
 
-# for item in tqdm(data, total = len(data)):
-#     print(f'images/{item['frame_no']}.png')
-#     img = Image.open(f'images/{item['frame_no']}.png')
+# for idx, item in tqdm(enumerate(dataset), total = len(dataset)):
+#     print(f'images/{item['frame_name']}')
+#     img = Image.open(f'images/{item['frame_name']}')
 #     print(img.size)
 #     x, y, width, height = normalize_bbox(item['x'], item['y'], item['width'], item['height'], org_w, org_h)
 #     draw = ImageDraw.Draw(img)
 #     draw.rectangle([x, y, width+x, height+y], outline = 'red', width = 2)
-#     img.save('lol.png')
-#     break
+#     img.save(f'lol_{idx}.png')
+#     if idx == 10:
+#         break
 

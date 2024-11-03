@@ -21,9 +21,9 @@ def draw_boxes(image, bboxes, width = 2):
         draw.rectangle([x_min, y_min, x_max, y_max], outline="red", width=2)
     return image
 
-img = Image.open('images/1.png')
+img = Image.open('images/outfile_1_1.jpg')
 print(img.size)
-with open('labels/1.txt', 'r') as f:
+with open('labels/outfile_1_1.txt', 'r') as f:
     labels = f.read().split('\n')
 labels = [l for l in labels if l != '']
 data = []

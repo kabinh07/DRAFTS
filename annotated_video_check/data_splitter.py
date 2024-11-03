@@ -2,6 +2,7 @@ import json
 import subprocess
 import os
 from PIL import Image
+from yolo_format_converter import normalize_bbox
 
 label_map = {
     "heavy_truck": 0,
@@ -25,7 +26,7 @@ with open('dataset.json', 'r') as f:
     dataset = json.load(f)
 
 for data in dataset:
-    image_file = data['frame_name']
+    image_file = data['frame']
     if not os.path.exists(f'images/{image_file}'):
         subprocess.run(['cp', f'all_images/{image_file}', 'images'])
     img = Image.open(f'images/{image_file}')
@@ -34,7 +35,8 @@ for data in dataset:
     y = data['y']
     w = data['width']
     h = data['height']
-    x, y, w, h = (x + w / 2) / width, (y + h / 2) / height, w / width, h / height
+    # x, y, w, z = normalize_bbox(x, y, w, h, width, height)
+    x, y, w, h = (x + w / 2) / 100, (y + h / 2) / 100, w / 100, h / 100
     label = float(label_map[data['label']])
     with open(f'labels/{image_file.split('.')[0]}.txt', 'a') as f:
         f.write(f"{label} {x} {y} {w} {h}")
