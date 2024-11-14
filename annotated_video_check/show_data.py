@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw
+import os
 
 def draw_boxes(image, bboxes, width = 2): 
     image_width, image_height = image.size
@@ -21,18 +22,26 @@ def draw_boxes(image, bboxes, width = 2):
         draw.rectangle([x_min, y_min, x_max, y_max], outline="red", width=2)
     return image
 
-img = Image.open('images/outfile_1_1.jpg')
-print(img.size)
-with open('labels/outfile_1_1.txt', 'r') as f:
-    labels = f.read().split('\n')
-labels = [l for l in labels if l != '']
-data = []
-for label in labels:
-    l = label.split(' ')
-    l = [i for i in l if i!= '']
-    data.append(list(map(float, l)))
+def draw_bbox_and_save(image, label):
+    img = Image.open(f'images/{image}')
+    with open(f'labels/{label}', 'r') as f:
+        labels = f.read().split('\n')
+    labels = [l for l in labels if l != '']
+    data = []
+    for label in labels:
+        l = label.split(' ')
+        l = [i for i in l if i!= '']
+        data.append(list(map(float, l)))
 
-bbox = [d[1:] for d in data]
+    bbox = [d[1:] for d in data]
 
-image = draw_boxes(img, bbox)
-image.save('lol.png')
+    drawn_img = draw_boxes(img, bbox)
+    drawn_img.save(f'bbox_images/{image}')
+
+images = os.listdir('images/')
+labels = os.listdir('labels')
+if len(images) == len(labels):
+    for image in images:
+        label = image.split('.')[0]+'.txt'
+        print(image, label)
+        draw_bbox_and_save(image, label)
