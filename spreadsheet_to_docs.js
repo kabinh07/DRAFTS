@@ -10,10 +10,10 @@ function generateConsentDocs() {
   var body = doc.getBody();
 
   // Set Page Margins (Left, Top, Right, Bottom in points)
-  body.setMarginTop(28.8);   // 10.16 cm
-  body.setMarginBottom(28.8); // 10.16 cm
-  body.setMarginLeft(7.2);   // 2.54 cm
-  body.setMarginRight(7.2); // 2.54 cm
+  body.setMarginLeft(72);   // 1 inch
+  body.setMarginTop(288);   // 4 inches
+  body.setMarginRight(72);  // 1 inch
+  // body.setMarginBottom(288);   // 4 inches
 
   for (var i = 0; i < data.length; i++) {
     Logger.log("Processing row: " + i)
@@ -35,7 +35,7 @@ function generateConsentDocs() {
     title.setFontSize(14).setBold(true).setUnderline(true).setLineSpacing(1.5);
 
     // Add some spacing
-    body.appendParagraph("\n");
+    body.appendParagraph("\n\n");
 
     // Create a paragraph for the consent text
     var consentPara = body.appendParagraph("");
@@ -73,7 +73,7 @@ function generateConsentDocs() {
     
     wordsToBold.forEach(word => setBoldText(consentPara, word));
 
-    consentPara.appendText("\n\n\n");
+    consentPara.appendText("\n\n");
 
     // Signature Section
     var signature = body.appendParagraph("\nSignature: ___________________\nFull Name:");
